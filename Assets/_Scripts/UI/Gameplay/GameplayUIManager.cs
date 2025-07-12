@@ -63,6 +63,8 @@ public class GameplayUIManager : MonoBehaviour
     {
         _stickCanvas.gameObject.SetActive(false);
         _buyingCanvas.gameObject.SetActive(true);
+        _buyingCanvas.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        LeanTween.scale(_buyingCanvas, Vector3.one, 0.1f).setEaseInBounce();
     }
 
     private void UpdateMoney(int currentAmount)
@@ -90,23 +92,28 @@ public class GameplayUIManager : MonoBehaviour
     private void BuyStack()
     {
         OnPlayerBoughtStack(_storeValues.AddStackSize);
+        LeanTween.scale(_buyStack.gameObject, Vector3.one * 1.2f, 0.1f).setEaseOutSine().setOnComplete(() => LeanTween.scale(_buyStack.gameObject, Vector3.one, 0.1f).setEaseInSine());
     }
 
     private void BuyColor()
     {
         _colorChosen = _colorsToSell.Colors[_colorIndex];
         OnPlayerBoughtColor(_colorChosen, _storeValues.NewColor);
+        LeanTween.scale(_buyColor.gameObject, Vector3.one * 1.2f, 0.1f).setEaseOutSine().setOnComplete(() => LeanTween.scale(_buyColor.gameObject, Vector3.one, 0.1f).setEaseInSine());
     }
 
     private void PlusColor()
     {
         _colorIndex = (_colorIndex + 1) % _colorsToSell.Colors.Length;
         _colorFeedback.color = _colorsToSell.Colors[_colorIndex];
+        LeanTween.scale(_plusColorBtn.gameObject, Vector3.one * 1.2f, 0.1f).setEaseOutSine().setOnComplete(() => LeanTween.scale(_plusColorBtn.gameObject, Vector3.one, 0.1f).setEaseInSine());
     }
 
     private void MinusColor()
     {
         _colorIndex = (_colorIndex - 1 + _colorsToSell.Colors.Length) % _colorsToSell.Colors.Length;
         _colorFeedback.color = _colorsToSell.Colors[_colorIndex];
+        LeanTween.scale(_minusColorBtn.gameObject, Vector3.one * 1.2f, 0.1f).setEaseOutSine().setOnComplete(() => LeanTween.scale(_minusColorBtn.gameObject, Vector3.one, 0.1f).setEaseInSine());
+
     }
 }
