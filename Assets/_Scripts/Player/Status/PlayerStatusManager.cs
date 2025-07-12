@@ -12,7 +12,7 @@ public class PlayerStatusManager : MonoBehaviour
     private Stack<Transform> _playerStack;
     private PlayerStatus _currentStatus;
 
-    public static event Action<int> OnEnemySold;
+    public static event Action<int> OnPlayerUpdatedMoney;
 
     private void Awake()
     {
@@ -59,7 +59,7 @@ public class PlayerStatusManager : MonoBehaviour
                 LeanTween.move(objToSell, spotPosition, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() =>
                 {
                     _currentStatus.CurrentMoney++;
-                    LeanTween.scale(objToSell, Vector3.zero, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() => OnEnemySold(_currentStatus.CurrentMoney));
+                    LeanTween.scale(objToSell, Vector3.zero, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() => OnPlayerUpdatedMoney(_currentStatus.CurrentMoney));
                 });
             });
         }
@@ -78,7 +78,7 @@ public class PlayerStatusManager : MonoBehaviour
     public void AddToStack(Transform transform)
     {
         if (_playerStack.Count >= _currentStatus.MaxStack) return;
-        
+
         _playerStack.Push(transform);
         transform.SetParent(this.transform);
 
@@ -91,14 +91,26 @@ public class PlayerStatusManager : MonoBehaviour
         }
     }
 
-    private void AddStackSize()
+    private void AddStackSize(int newStackValue)
     {
-        _currentStatus.MaxStack++;
+        ChangeMoney(-newStackValue);
+        _currentStatus.CurrentMoney--;
     }
 
-    private void ChangeColor(Color newColor)
+    private void ChangeColor(Color newColor, int newColorValue)
     {
+        ChangeMoney(-newColorValue);
         _playerMaterial.color = newColor;
+    }
+
+    private void ChangeMoney(int quantity)
+    {
+        _currentStatus.CurrentMoney += quantity;
+
+        if (_currentStatus.CurrentMoney < 0)
+            _currentStatus.CurrentMoney = 0;
+
+        OnPlayerUpdatedMoney(_currentStatus.CurrentMoney);
     }
 }
 

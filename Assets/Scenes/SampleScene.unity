@@ -2248,6 +2248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3595e624700c4f4479755c27d8e26624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _storeValues: {fileID: 11400000, guid: 718d1e3589d97d94a995d6cf4e6dee00, type: 2}
   _buyingCanvas: {fileID: 1813372732}
   _stickCanvas: {fileID: 1122329673}
   _colorFeedback: {fileID: 554877104}
@@ -4968,7 +4969,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1813372733
 RectTransform:
   m_ObjectHideFlags: 0

@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 897397d3ff9fe8640b41c3abd0547082, type: 3}
-  m_Name: SO_PlayerStatus
+  m_Script: {fileID: 11500000, guid: a1e6b0146ce0f9746ad2e88a21134279, type: 3}
+  m_Name: SO_StoreValues
   m_EditorClassIdentifier: 
-  InitialMaxStack: 3
-  InitialMoney: 0
+  NewColor: 1
+  AddStackSize: 1

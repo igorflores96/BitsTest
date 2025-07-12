@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameplayUIManager : MonoBehaviour
 {
 
+    [SerializeField] private SO_StoreValues _storeValues;
     [SerializeField] private GameObject _buyingCanvas;
     [SerializeField] private GameObject _stickCanvas;
     [SerializeField] private Image _colorFeedback;
@@ -19,8 +20,8 @@ public class GameplayUIManager : MonoBehaviour
     [SerializeField] private Button _minusColorBtn;
 
     public static event Action OnPlayerStopBuying;
-    public static event Action OnPlayerBoughtStack;
-    public static event Action<Color> OnPlayerBoughtColor;
+    public static event Action<int> OnPlayerBoughtStack;
+    public static event Action<Color, int> OnPlayerBoughtColor;
 
     private int _colorIndex;
     private Color _colorChosen;
@@ -29,11 +30,14 @@ public class GameplayUIManager : MonoBehaviour
     {
         _colorIndex = 0;
         _colorFeedback.color = _colorsToSell.Colors[_colorIndex];
+
+        _buyColor.interactable = false;
+        _buyStack.interactable = false;
     }
 
     private void OnEnable()
     {
-        PlayerStatusManager.OnEnemySold += UpdateMoney;
+        PlayerStatusManager.OnPlayerUpdatedMoney += UpdateMoney;
         PlayerCollision.OnPlayerBuying += PlayerBuying;
         _closeMenuBtn.onClick.AddListener(CloseBuyingMenu);
         _plusColorBtn.onClick.AddListener(PlusColor);
@@ -45,7 +49,7 @@ public class GameplayUIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerStatusManager.OnEnemySold -= UpdateMoney;
+        PlayerStatusManager.OnPlayerUpdatedMoney -= UpdateMoney;
         PlayerCollision.OnPlayerBuying -= PlayerBuying;
         _closeMenuBtn.onClick.RemoveListener(CloseBuyingMenu);
         _plusColorBtn.onClick.RemoveListener(PlusColor);
@@ -63,8 +67,18 @@ public class GameplayUIManager : MonoBehaviour
 
     private void UpdateMoney(int currentAmount)
     {
+        bool haveMoney = currentAmount > 0;
         _moneyTextGameplay.text = currentAmount.ToString();
         _moneyTextStore.text = currentAmount.ToString();
+
+
+        CheckButtons(haveMoney);
+    }
+
+    private void CheckButtons(bool playerHaveMoney)
+    {
+        _buyColor.interactable = playerHaveMoney;
+        _buyStack.interactable = playerHaveMoney;
     }
 
     private void CloseBuyingMenu()
@@ -75,13 +89,13 @@ public class GameplayUIManager : MonoBehaviour
 
     private void BuyStack()
     {
-        OnPlayerBoughtStack();
+        OnPlayerBoughtStack(_storeValues.AddStackSize);
     }
 
     private void BuyColor()
     {
         _colorChosen = _colorsToSell.Colors[_colorIndex];
-        OnPlayerBoughtColor(_colorChosen);
+        OnPlayerBoughtColor(_colorChosen, _storeValues.NewColor);
     }
 
     private void PlusColor()
