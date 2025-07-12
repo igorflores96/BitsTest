@@ -25,6 +25,7 @@ public class PlayerStatusManager : MonoBehaviour
         PlayerCollision.OnPlayerSelling += Sell;
         RagdollController.OnPunched += AddToStack;
         GameplayUIManager.OnPlayerBoughtColor += ChangeColor;
+        GameplayUIManager.OnPlayerBoughtStack += AddStackSize;
     }
 
     private void OnDisable()
@@ -32,6 +33,7 @@ public class PlayerStatusManager : MonoBehaviour
         PlayerCollision.OnPlayerSelling -= Sell;
         RagdollController.OnPunched -= AddToStack;
         GameplayUIManager.OnPlayerBoughtColor -= ChangeColor;
+        GameplayUIManager.OnPlayerBoughtStack -= AddStackSize;
 
     }
 
@@ -75,6 +77,8 @@ public class PlayerStatusManager : MonoBehaviour
 
     public void AddToStack(Transform transform)
     {
+        if (_playerStack.Count >= _currentStatus.MaxStack) return;
+        
         _playerStack.Push(transform);
         transform.SetParent(this.transform);
 
@@ -85,6 +89,11 @@ public class PlayerStatusManager : MonoBehaviour
             array[i].localPosition = new Vector3(0.0f, (i + 3.0f) * 0.5f, -1.0f);
             array[i].localRotation = Quaternion.Euler(0f, 90f, 0f);
         }
+    }
+
+    private void AddStackSize()
+    {
+        _currentStatus.MaxStack++;
     }
 
     private void ChangeColor(Color newColor)

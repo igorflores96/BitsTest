@@ -10,7 +10,8 @@ public class GameplayUIManager : MonoBehaviour
     [SerializeField] private GameObject _stickCanvas;
     [SerializeField] private Image _colorFeedback;
     [SerializeField] private SO_Colors _colorsToSell;
-    [SerializeField] private TextMeshProUGUI _moneyText;
+    [SerializeField] private TextMeshProUGUI _moneyTextGameplay;
+    [SerializeField] private TextMeshProUGUI _moneyTextStore;
     [SerializeField] private Button _buyStack;
     [SerializeField] private Button _buyColor;
     [SerializeField] private Button _closeMenuBtn;
@@ -18,6 +19,7 @@ public class GameplayUIManager : MonoBehaviour
     [SerializeField] private Button _minusColorBtn;
 
     public static event Action OnPlayerStopBuying;
+    public static event Action OnPlayerBoughtStack;
     public static event Action<Color> OnPlayerBoughtColor;
 
     private int _colorIndex;
@@ -61,7 +63,8 @@ public class GameplayUIManager : MonoBehaviour
 
     private void UpdateMoney(int currentAmount)
     {
-        _moneyText.text = currentAmount.ToString();
+        _moneyTextGameplay.text = currentAmount.ToString();
+        _moneyTextStore.text = currentAmount.ToString();
     }
 
     private void CloseBuyingMenu()
@@ -72,7 +75,7 @@ public class GameplayUIManager : MonoBehaviour
 
     private void BuyStack()
     {
-
+        OnPlayerBoughtStack();
     }
 
     private void BuyColor()
