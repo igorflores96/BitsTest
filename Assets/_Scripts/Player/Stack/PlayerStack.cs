@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,27 +8,43 @@ public class PlayerStack : MonoBehaviour
     [SerializeField] private PlayerCollision _collision;
     private Stack<Transform> _playerStack;
 
-    void OnEnable()
+    public static event Action OnEnemySold;
+
+    private void OnEnable()
     {
         _playerStack = new Stack<Transform>();
+        PlayerCollision.OnPlayerSelling += Sell;
+    }
+
+    private void OnDisable()
+    {
+        PlayerCollision.OnPlayerSelling -= Sell;
     }
 
     private void Update()
     {
         //Inertia();
-        TryToSell();
     }
 
-    private void TryToSell()
+    private void Sell(Vector3 spotPosition)
     {
-        if (!_collision.IsSelling || _playerStack.Count == 0) return;
+        if (_playerStack.Count == 0) return;
 
         Transform[] array = _playerStack.ToArray();
+        _playerStack.Clear();
 
         for (int i = 0; i < array.Length; i++)
         {
+            GameObject objToSell = array[i].gameObject;
             array[i].SetParent(null);
-            array[i].transform.position = _collision.SellingSpotPosition;
+
+            LeanTween.delayedCall(i * 0.1f, () =>
+            {
+                LeanTween.move(objToSell, spotPosition, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() =>
+                {
+                    LeanTween.scale(objToSell, Vector3.zero, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() => OnEnemySold());
+                });
+            });
         }
     }
 
