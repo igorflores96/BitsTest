@@ -1,20 +1,36 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class GameplayUIManager : MonoBehaviour
 {
 
+    [SerializeField] private GameObject _buyingCanvas;
+    [SerializeField] private GameObject _stickCanvas;
+    [SerializeField] private TextMeshProUGUI _moneyText;
+
+    public static event Action OnPlayerStopBuying;
+
     private void OnEnable()
     {
-        PlayerStack.OnEnemySold += Test;
+        PlayerStatusManager.OnEnemySold += UpdateMoney;
+        PlayerCollision.OnPlayerBuying += PlayerBuying;
+
     }
 
     private void OnDisable()
     {
-        PlayerStack.OnEnemySold -= Test;
+        PlayerStatusManager.OnEnemySold -= UpdateMoney;
+        PlayerCollision.OnPlayerBuying -= PlayerBuying;
     }
 
-    private void Test()
+    private void PlayerBuying()
     {
-        Debug.Log("funcionando");
+        _stickCanvas.gameObject.SetActive(false);
+    }
+
+    private void UpdateMoney(int currentAmount)
+    {
+        _moneyText.text = $"Money: {currentAmount}";
     }
 }

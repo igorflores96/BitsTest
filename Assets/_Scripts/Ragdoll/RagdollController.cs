@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ public class RagdollController : MonoBehaviour
     private Rigidbody[] _allRbs;
     private Transform _playerParent;
     bool _isRagdollState;
-    
+
+    public static event Action<Transform> OnPunched;
 
     private void OnEnable()
     {
@@ -50,8 +52,7 @@ public class RagdollController : MonoBehaviour
             bone.isKinematic = true;
 
         _characterBody.localPosition = Vector3.zero;
-        _playerParent.gameObject.TryGetComponent(out PlayerStack stack);
-        stack?.AddToStack(this.transform);
+        OnPunched(this.transform);
     }
 
     public void ActiveRagdoll(Transform player)

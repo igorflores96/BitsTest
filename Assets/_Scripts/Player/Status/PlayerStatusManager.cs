@@ -2,23 +2,33 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStack : MonoBehaviour
+public class PlayerStatusManager : MonoBehaviour
 {
     [SerializeField] private PlayerInput _input;
     [SerializeField] private PlayerCollision _collision;
-    private Stack<Transform> _playerStack;
+    [SerializeField] private SO_PlayerStatus _initialStatus;
 
-    public static event Action OnEnemySold;
+    private Stack<Transform> _playerStack;
+    private PlayerStatus _currentStatus;
+
+    public static event Action<int> OnEnemySold;
+
+    private void Awake()
+    {
+        _currentStatus = new PlayerStatus(_initialStatus);
+    }
 
     private void OnEnable()
     {
         _playerStack = new Stack<Transform>();
         PlayerCollision.OnPlayerSelling += Sell;
+        RagdollController.OnPunched += AddToStack;
     }
 
     private void OnDisable()
     {
         PlayerCollision.OnPlayerSelling -= Sell;
+        RagdollController.OnPunched -= AddToStack;
     }
 
     private void Update()
@@ -42,7 +52,8 @@ public class PlayerStack : MonoBehaviour
             {
                 LeanTween.move(objToSell, spotPosition, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() =>
                 {
-                    LeanTween.scale(objToSell, Vector3.zero, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() => OnEnemySold());
+                    _currentStatus.CurrentMoney++;
+                    LeanTween.scale(objToSell, Vector3.zero, 0.1f).setEase(LeanTweenType.linear).setOnComplete(() => OnEnemySold(_currentStatus.CurrentMoney));
                 });
             });
         }
@@ -70,5 +81,18 @@ public class PlayerStack : MonoBehaviour
             array[i].localPosition = new Vector3(0.0f, (i + 3.0f) * 0.5f, -1.0f);
             array[i].localRotation = Quaternion.Euler(0f, 90f, 0f);
         }
+    }
+}
+
+
+public class PlayerStatus
+{
+    public int CurrentMoney;
+    public int MaxStack;
+
+    public PlayerStatus(SO_PlayerStatus initialStatus)
+    {
+        MaxStack = initialStatus.InitialMaxStack;
+        CurrentMoney = initialStatus.InitialMoney;
     }
 }

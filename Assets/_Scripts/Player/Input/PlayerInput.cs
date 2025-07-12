@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -8,14 +7,32 @@ public class PlayerInput : MonoBehaviour
 
     public Vector2 JoystickValue => _currentPos;
 
-    void OnEnable()
+    private void OnEnable()
     {
         _inputAction = new InputSystem_Actions();
         _inputAction.Player.Enable();
+
+        PlayerCollision.OnPlayerBuying += DisableInputMovement;
+    }
+
+    private void OnDisable()
+    {
+        _inputAction.Player.Disable();
+        PlayerCollision.OnPlayerBuying -= DisableInputMovement;
     }
 
     private void Update()
     {
         _currentPos = _inputAction.Player.Move.ReadValue<Vector2>();
+    }
+
+    private void DisableInputMovement()
+    {
+        _inputAction.Player.Move.Disable();
+    }
+
+    private void EnableInputMovement()
+    {
+        _inputAction.Player.Move.Enable();
     }
 }
