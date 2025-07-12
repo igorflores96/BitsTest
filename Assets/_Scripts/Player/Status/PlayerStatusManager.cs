@@ -94,7 +94,7 @@ public class PlayerStatusManager : MonoBehaviour
     private void AddStackSize(int newStackValue)
     {
         ChangeMoney(-newStackValue);
-        _currentStatus.CurrentMoney--;
+        _currentStatus.MaxStack++;
     }
 
     private void ChangeColor(Color newColor, int newColorValue)
