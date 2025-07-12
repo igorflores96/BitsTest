@@ -4,7 +4,6 @@ public class CameraMovement : MonoBehaviour
 {
 
     [SerializeField] private Transform _targetToFollow;
-    [SerializeField] private float _zOffset = -10f;
 
     void OnEnable()
     {
@@ -14,6 +13,7 @@ public class CameraMovement : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.Translate(new Vector3(_targetToFollow.position.x, transform.position.y, _targetToFollow.position.z * _zOffset), Space.World);
+        transform.position = new Vector3(_targetToFollow.position.x + 3f, transform.position.y, _targetToFollow.position.z - 8f);
     }
+
 }

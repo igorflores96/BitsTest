@@ -24,8 +24,7 @@ public class PlayerCollision : MonoBehaviour
 
         if (other.transform.CompareTag(BuyingTag))
         {
-            _sellingSpotPos = other.transform.position;
-            _sellingCrt = StartCoroutine(nameof(AwaitToBuy));
+            _buyingCrt = StartCoroutine(nameof(AwaitToBuy));
         }
     }
 
@@ -38,7 +37,7 @@ public class PlayerCollision : MonoBehaviour
         }
 
         if (other.transform.CompareTag(BuyingTag))
-            if (_buyingCrt != null) StopCoroutine(_sellingCrt);
+            if (_buyingCrt != null) StopCoroutine(_buyingCrt);
     }
 
     private IEnumerator AwaitToBuy()

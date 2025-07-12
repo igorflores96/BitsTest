@@ -71,8 +71,14 @@ public class PlayerStatusManager : MonoBehaviour
             return;
 
         Transform[] array = _playerStack.ToArray();
-        Transform first = array[array.Length - 1];
-        first.localPosition = Vector3.Lerp(first.localPosition, first.localPosition + new Vector3(_input.JoystickValue.x, 0.0f, _input.JoystickValue.y), Time.deltaTime * 5f);
+        float opositeX = -_input.JoystickValue.x;
+        float opositeY = _input.JoystickValue.y;
+
+        for (int i = array.Length - 1; i >= 0; i--)
+        {
+            Vector3 localPos = array[i].localPosition;
+            array[i].localPosition = Vector3.Lerp(array[i].localPosition, new Vector3(localPos.x + (opositeX * i), localPos.y, localPos.z + (opositeY * i)), Time.deltaTime * 2f);
+        }
     }
 
     public void AddToStack(Transform transform)
