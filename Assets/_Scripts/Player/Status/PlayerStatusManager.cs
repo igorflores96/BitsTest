@@ -7,6 +7,7 @@ public class PlayerStatusManager : MonoBehaviour
     [SerializeField] private PlayerInput _input;
     [SerializeField] private PlayerCollision _collision;
     [SerializeField] private SO_PlayerStatus _initialStatus;
+    [SerializeField] private Material _playerMaterial;
 
     private Stack<Transform> _playerStack;
     private PlayerStatus _currentStatus;
@@ -23,12 +24,15 @@ public class PlayerStatusManager : MonoBehaviour
         _playerStack = new Stack<Transform>();
         PlayerCollision.OnPlayerSelling += Sell;
         RagdollController.OnPunched += AddToStack;
+        GameplayUIManager.OnPlayerBoughtColor += ChangeColor;
     }
 
     private void OnDisable()
     {
         PlayerCollision.OnPlayerSelling -= Sell;
         RagdollController.OnPunched -= AddToStack;
+        GameplayUIManager.OnPlayerBoughtColor -= ChangeColor;
+
     }
 
     private void Update()
@@ -81,6 +85,11 @@ public class PlayerStatusManager : MonoBehaviour
             array[i].localPosition = new Vector3(0.0f, (i + 3.0f) * 0.5f, -1.0f);
             array[i].localRotation = Quaternion.Euler(0f, 90f, 0f);
         }
+    }
+
+    private void ChangeColor(Color newColor)
+    {
+        _playerMaterial.color = newColor;
     }
 }
 

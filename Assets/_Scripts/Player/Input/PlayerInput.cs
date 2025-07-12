@@ -13,12 +13,14 @@ public class PlayerInput : MonoBehaviour
         _inputAction.Player.Enable();
 
         PlayerCollision.OnPlayerBuying += DisableInputMovement;
+        GameplayUIManager.OnPlayerStopBuying += EnableInputMovement;
     }
 
     private void OnDisable()
     {
         _inputAction.Player.Disable();
         PlayerCollision.OnPlayerBuying -= DisableInputMovement;
+        GameplayUIManager.OnPlayerStopBuying -= EnableInputMovement;
     }
 
     private void Update()
