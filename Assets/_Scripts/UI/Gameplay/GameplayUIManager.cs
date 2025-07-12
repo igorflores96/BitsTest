@@ -15,7 +15,6 @@ public class GameplayUIManager : MonoBehaviour
     {
         PlayerStatusManager.OnEnemySold += UpdateMoney;
         PlayerCollision.OnPlayerBuying += PlayerBuying;
-
     }
 
     private void OnDisable()
@@ -27,6 +26,7 @@ public class GameplayUIManager : MonoBehaviour
     private void PlayerBuying()
     {
         _stickCanvas.gameObject.SetActive(false);
+        _buyingCanvas.gameObject.SetActive(true);
     }
 
     private void UpdateMoney(int currentAmount)
