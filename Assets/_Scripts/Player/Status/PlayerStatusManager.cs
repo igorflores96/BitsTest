@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerStatusManager : MonoBehaviour
@@ -39,7 +40,7 @@ public class PlayerStatusManager : MonoBehaviour
 
     private void Update()
     {
-        //Inertia();
+        Inertia();
     }
 
     private void Sell(Vector3 spotPosition)
@@ -71,13 +72,38 @@ public class PlayerStatusManager : MonoBehaviour
             return;
 
         Transform[] array = _playerStack.ToArray();
-        float opositeX = -_input.JoystickValue.x;
-        float opositeY = _input.JoystickValue.y;
+        Vector2 input = _input.JoystickValue;
+        float targetX = 0.0f;
+        float targetZ = 0.0f;
 
         for (int i = array.Length - 1; i >= 0; i--)
         {
             Vector3 localPos = array[i].localPosition;
-            array[i].localPosition = Vector3.Lerp(array[i].localPosition, new Vector3(localPos.x + (opositeX * i), localPos.y, localPos.z + (opositeY * i)), Time.deltaTime * 2f);
+
+            if (input.y == 0f && input.x != 0f) //if just use X axis
+            {
+                targetZ = input.x > 0f ? localPos.z - input.x * i : localPos.z + input.x * i;
+                targetX = 0.0f; //X is already zero, here just to clarity
+            }
+            else if (input.y != 0f && input.x == 0f) // if just use Y axis
+            {
+                targetZ = input.y > 0f ? localPos.z - input.y * i : localPos.z + input.y * i;
+                targetX = 0.0f;
+            }
+            else if (input == Vector2.zero)
+            {
+                targetZ = -1.0f;
+                targetX = 0.0f;
+            }
+            else
+            {
+                targetZ = input.y > 0f ? localPos.z - input.y * i : localPos.z + input.y * i;
+                targetX = input.y > 0f ? localPos.x - input.x * i : localPos.x + input.x * i; //change it depends of Y axis. 
+            }
+
+            targetX = Mathf.Clamp(targetX, -0.5f, 0.5f);
+            targetZ = Mathf.Clamp(targetZ, -1.5f, 0.5f);
+            array[i].localPosition = Vector3.Lerp(localPos, new Vector3(targetX, localPos.y, targetZ), Time.deltaTime * 1.5f);
         }
     }
 
