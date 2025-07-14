@@ -69,18 +69,19 @@ public class GameplayUIManager : MonoBehaviour
 
     private void UpdateMoney(int currentAmount)
     {
-        bool haveMoney = currentAmount > 0;
+        bool haveColorMoney = currentAmount >= _storeValues.NewColor;
+        bool haveStackMoney = currentAmount >= _storeValues.AddStackSize;
         _moneyTextGameplay.text = currentAmount.ToString();
         _moneyTextStore.text = currentAmount.ToString();
 
 
-        CheckButtons(haveMoney);
+        CheckButtons(haveColorMoney, haveStackMoney);
     }
 
-    private void CheckButtons(bool playerHaveMoney)
+    private void CheckButtons(bool colorMoney, bool stackMoney)
     {
-        _buyColor.interactable = playerHaveMoney;
-        _buyStack.interactable = playerHaveMoney;
+        _buyColor.interactable = colorMoney;
+        _buyStack.interactable = stackMoney;
     }
 
     private void CloseBuyingMenu()

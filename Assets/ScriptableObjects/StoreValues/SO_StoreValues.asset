@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SO_StoreValues
   m_EditorClassIdentifier: 
   NewColor: 1
-  AddStackSize: 1
+  AddStackSize: 3
