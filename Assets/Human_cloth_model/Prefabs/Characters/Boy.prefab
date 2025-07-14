@@ -391,6 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2fae67c25d42c46bfce05db3b68a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerStatus: {fileID: 9165308066876693102}
   _punchDistance: 1
 --- !u!114 &9165308066876693102
 MonoBehaviour:

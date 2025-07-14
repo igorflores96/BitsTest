@@ -13,6 +13,8 @@ public class PlayerStatusManager : MonoBehaviour
     private Stack<Transform> _playerStack;
     private PlayerStatus _currentStatus;
 
+    public bool StackIsFull => _currentStatus.MaxStack == _playerStack.Count; 
+
     public static event Action<int> OnPlayerUpdatedMoney;
 
     private void Awake()

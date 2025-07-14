@@ -19,7 +19,18 @@ public class RagdollController : MonoBehaviour
         _playerParent = null;
         _allRbs = GetComponentsInChildren<Rigidbody>();
 
-        UpdateRagdoll(false, false);
+        InitialSetup();
+    }
+
+    private void InitialSetup()
+    {
+        _characterCollider.enabled = true;
+        _isRagdollState = false;
+
+        foreach (Rigidbody bone in _allRbs)
+            bone.isKinematic = true;
+
+        _characterAnimator.enabled = true;
     }
 
     private void UpdateRagdoll(bool isActive, bool shouldGoToPlayer)
@@ -32,16 +43,28 @@ public class RagdollController : MonoBehaviour
 
         _characterAnimator.enabled = !_isRagdollState;
 
+        GetPunched();
+
         if (shouldGoToPlayer)
-        {
-            Vector3 direction = transform.position - _playerParent.position;
-            direction = direction.normalized;
-
-            foreach (Rigidbody bone in _allRbs)
-                bone.linearVelocity = direction * 4f + Vector3.up * 2f;
-
             StartCoroutine(nameof(GoToPlayer));
-        }
+        else if (isActive)
+            StartCoroutine(nameof(GetUp));
+    }
+
+    private void GetPunched()
+    {
+        Vector3 direction = transform.position - _playerParent.position;
+        direction = direction.normalized;
+
+        foreach (Rigidbody bone in _allRbs)
+            bone.linearVelocity = direction * 4f + Vector3.up * 2f;
+    }
+
+    private IEnumerator GetUp()
+    {
+        yield return new WaitForSeconds(2f);
+        _playerParent = null;
+        UpdateRagdoll(false, false);
     }
 
     private IEnumerator GoToPlayer()
@@ -53,11 +76,12 @@ public class RagdollController : MonoBehaviour
 
         _characterBody.localPosition = Vector3.zero;
         OnPunched(this.transform);
+
     }
 
-    public void ActiveRagdoll(Transform player)
+    public void ActiveRagdoll(Transform player, bool shouldGoToPlayer)
     {
         _playerParent = player;
-        UpdateRagdoll(true, true);
+        UpdateRagdoll(true, shouldGoToPlayer);
     }
 }
