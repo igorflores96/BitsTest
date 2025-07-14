@@ -54,7 +54,7 @@ public class RagdollController : MonoBehaviour
     private void GetPunched()
     {
         if (_playerParent == null) return; 
-        
+
         Vector3 direction = transform.position - _playerParent.position;
         direction = direction.normalized;
 
@@ -66,7 +66,7 @@ public class RagdollController : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         _playerParent = null;
-        UpdateRagdoll(false, false);
+        InitialSetup();
     }
 
     private IEnumerator GoToPlayer()
