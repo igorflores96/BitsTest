@@ -86,6 +86,7 @@ public class GameplayUIManager : MonoBehaviour
     private void CloseBuyingMenu()
     {
         _buyingCanvas.gameObject.SetActive(false);
+        _stickCanvas.gameObject.SetActive(true);
         OnPlayerStopBuying();
     }
 
