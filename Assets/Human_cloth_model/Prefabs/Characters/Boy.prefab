@@ -305,6 +305,7 @@ GameObject:
   - component: {fileID: 9165308066876693102}
   - component: {fileID: 3224875130465888379}
   - component: {fileID: 4775950604943948885}
+  - component: {fileID: 7658511732428111660}
   m_Layer: 0
   m_Name: Boy
   m_TagString: Untagged
@@ -391,6 +392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2fae67c25d42c46bfce05db3b68a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 6959053676532882838}
   _playerStatus: {fileID: 9165308066876693102}
   _punchDistance: 1
 --- !u!114 &9165308066876693102
@@ -444,6 +446,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &7658511732428111660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4054044970919396095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dee58ba38c084645916620e346806b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 6959053676532882838}
+  _playerInput: {fileID: 7364067357878310810}
 --- !u!1 &4139436137386016678
 GameObject:
   m_ObjectHideFlags: 0

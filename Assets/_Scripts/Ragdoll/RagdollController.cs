@@ -53,6 +53,8 @@ public class RagdollController : MonoBehaviour
 
     private void GetPunched()
     {
+        if (_playerParent == null) return; 
+        
         Vector3 direction = transform.position - _playerParent.position;
         direction = direction.normalized;
 
